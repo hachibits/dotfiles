@@ -1,8 +1,11 @@
-execute pathogen#infect()
+call plug#begin('~/.vim/plugged')
 
-call pathogen#helptags()
+Plug 'preservim/nerdtree'
+Plug 'junegunn/seoul256.vim'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
 
-set nocompatible
+call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
@@ -14,6 +17,8 @@ set nolazyredraw "Don't redraw while executing macros"
 set hlsearch
 set cursorline
 set ruler
+set nu rnu 
+set so=7
 
 set vb "no visual bell"
 set t_vb= "no visual bell"
@@ -30,12 +35,11 @@ set noswapfile
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Text, tabs and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set ts=4 sw=4
+"set ts=4 sw=4 
+set ts=2 sw=2 sts=2
 set expandtab
 set autoindent
 set smartindent
-autocmd Filetype python setlocal ts=2 sw=2 sts=2 expandtab
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Moving around, tabs and buffers
@@ -49,7 +53,6 @@ set bs=2
 set ls=2
 
 set t_Co=256
-"colorscheme koehler
 let g:seoul256_background=233
 colorscheme seoul256
 set background=dark
@@ -77,4 +80,10 @@ let vimrplugin_assign = 0
 
 autocmd BufNewFile,BufRead *.ts set syntax=javascript
 
-set mouse=a
+"strip trailing whitespace from certain files
+autocmd BufWritePre *.conf :%s/\s\+$//e
+autocmd BufWritePre *.py :%s/\s\+$//e
+autocmd BufWritePre *.css :%s/\s\+$//e
+autocmd BufWritePre *.html :%s/\s\+$//e
+
+"set mouse=a
