@@ -53,9 +53,9 @@ set bs=2
 set ls=2
 
 set t_Co=256
-let g:seoul256_background=233
-colorscheme seoul256
-set background=dark
+let g:seoul256_background = 233
+let g:seoul256_light_background = 256
+colo seoul256-light
 
 set tags=tags;/
 
