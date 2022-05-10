@@ -1,10 +1,4 @@
 [ -f "$LOCAL_ADMIN_SCRIPTS/master.zshrc" ] && source "$LOCAL_ADMIN_SCRIPTS/master.zshrc"
-source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-
-alias rm='rm -i'
-alias ls='ls -G'
-alias mv='mv -i'
-alias vim='vim -X -O'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -19,6 +13,19 @@ set -o no_extended_glob
 
 # Don't save duplicate commands in history
 setopt HIST_IGNORE_DUPS
+
+export PATH="$PATH:/Users/olxu/.local/bin"
+
+#alias rm='rm -i'
+alias gitcleanbranch='git branch --merged | egrep -v "(^\*|master|dev)" | xargs git branch -d'alias mydu='du -ks * | sort -nr | cut -f2 | sed '"'"'s/^/"/;s/$/"/'"'"' | xargs du -sh'
+alias grepr='grep -r -n --color=auto'
+alias ipython='ipython notebook --matplotlib inline'
+alias ls='ls -G'
+alias mv='mv -i'
+alias mydu='du -ks * | sort -nr | cut -f2 | sed '"'"'s/^/"/;s/$/"/'"'"' | xargs du -sh'
+alias screen='screen -e\`n -s /bin/bash'
+alias tmux='export TERM=xterm-256color; /usr/bin/tmux'
+alias vim='vim -X -O'
 
 # bash completion
 if [ -f $HOME/.zsh/bash_completion ]; then
@@ -41,9 +48,6 @@ autoload -Uz compinit && compinit
 
 autoload -U promptinit; promptinit
 prompt pure
-
-# Homebrew
-eval $(/opt/homebrew/bin/brew shellenv)
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
