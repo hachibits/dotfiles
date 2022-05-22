@@ -16,6 +16,10 @@ setopt HIST_IGNORE_DUPS
 
 export PATH="$PATH:/Users/olxu/.local/bin"
 
+export EDITOR=nvim
+export VISUAL=nvim
+alias vim=nvim
+
 #alias rm='rm -i'
 alias gitcleanbranch='git branch --merged | egrep -v "(^\*|master|dev)" | xargs git branch -d'alias mydu='du -ks * | sort -nr | cut -f2 | sed '"'"'s/^/"/;s/$/"/'"'"' | xargs du -sh'
 alias grepr='grep -r -n --color=auto'
@@ -54,3 +58,7 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
