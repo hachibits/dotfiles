@@ -2,8 +2,23 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'preservim/nerdtree'
 Plug 'junegunn/seoul256.vim'
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
+Plug 'jalvesaq/Nvim-R', {'branch': 'stable'}
+  let R_rconsole_height = 10
+  let R_openhtml = 0
+  let R_after_start = [':norm H']
+  let R_objbr_place = 'BOTTOM'
+  nmap <C-j> <Plug>RNextRChunk
+  nmap <C-k> <Plug>RPreviousRChunk
+  nmap <C-l> <Plug>RSendChunk
+  nmap <C-h> <Plug>RDSendLine
+  vmap <C-h> <Plug>RDSendSelection
+Plug 'vim-pandoc/vim-pandoc', {'for': 'rmd'}
+  let g:pandoc#modules#disabled = ["folding", "spell"]
+Plug 'vim-pandoc/vim-pandoc-syntax', {'for': 'rmd'}
+  let g:pandoc#syntax#conceal#use = 0
 
 call plug#end()
 
@@ -85,5 +100,8 @@ autocmd BufWritePre *.conf :%s/\s\+$//e
 autocmd BufWritePre *.py :%s/\s\+$//e
 autocmd BufWritePre *.css :%s/\s\+$//e
 autocmd BufWritePre *.html :%s/\s\+$//e
+
+autocmd Filetype rmd inoremap ;m <Space>%>%<Space>
+autocmd Filetype rmd nnoremap <Space>H :silent !brave &>/dev/null %<.html &<CR>:redraw!<CR>
 
 "set mouse=a
