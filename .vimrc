@@ -5,12 +5,12 @@ if !has('nvim')
   Plug 'junegunn/fzf', { 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
   Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --go-completer' }
+  Plug 'tpope/vim-fugitive'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
 Plug 'junegunn/vim-easy-align'
 Plug 'rust-lang/rust.vim'
-"Plug 'github/copilot.vim'
 Plug 'preservim/tagbar'
-Plug 'tpope/vim-fugitive'
 "Plug 'vim-scripts/Zenburn'
 
 if has('nvim')
@@ -112,7 +112,6 @@ local on_attach = function(client, bufnr)
 end
 
 local nvim_lsp = require("lspconfig")
-
 local servers = { 
   "clangd", 
   "rust_analyzer", 
@@ -357,6 +356,59 @@ require('gitsigns').setup{
   end
 }
 
+function _G.encoding_head()
+  local fenc = vim.bo.fenc
+  return (fenc ~= '' and fenc:sub(1,1):upper()) or '-'
+end
+
+function _G.file_flags()
+  local ro = vim.bo.readonly
+  local mod = vim.bo.modified
+  if ro and mod then return '%*'
+  elseif mod then return '**'
+  elseif ro then return '%%'
+  else return '--'
+  end
+end
+
+function _G.status_diagnostic()
+  local info = vim.diagnostic.get(0, { severity = { min = vim.diagnostic.severity.HINT } }) or {}
+  if vim.tbl_isempty(info) then return '' end
+  local msgs = {}
+  if info.error and info.error > 0 then
+    table.insert(msgs, 'E' .. info.error)
+  end
+  if info.warning and info.warning > 0 then
+    table.insert(msgs, 'W' .. info.warning)
+  end
+  return table.concat(msgs, ' ') .. ' ' .. (vim.lsp.status or '')
+end
+
+function _G.gitsigns_status()
+  local gs = package.loaded.gitsigns
+  if not gs then return '' end
+  local status = vim.b.gitsigns_status or ''
+  local head = vim.b.gitsigns_head
+  if head and #head > 0 then
+    return '⎇  ' .. head .. ' ' .. status
+  else
+    return status
+  end
+end
+
+vim.opt.statusline = table.concat({
+  '%{v:lua.encoding_head()}',
+  ':',
+  '%{v:lua.file_flags()}',
+  ' %f',
+  ' (%{&ft})%*',
+  ' %{v:lua.gitsigns_status()}',
+  '%=',
+  ' %P',
+  ' (%l,%c)',
+  '%{v:lua.status_diagnostic()}',
+}, '')
+
 require('fzf-lua').setup({'fzf-vim'})
 vim.keymap.set({ "n" }, '<Leader>f', 
   function()
@@ -429,7 +481,6 @@ silent! colo seoul256
 
 hi clear CursorLine
 hi CursorLine gui=underline cterm=underline
-set statusline+=%{get(b:,'gitsigns_status','')}
 
 set tags=tags;/
 
@@ -511,6 +562,21 @@ au Filetype python setlocal ts=2 sts=0 sw=2
 cmap w!! w !sudo tee > /dev/null %
 
 if !has('nvim')
+  function! StatusDiagnostic() abort
+    let info = get(b:, 'coc_diagnostic_info', {})
+    if empty(info) | return '' | endif
+    let msgs = []
+    if get(info, 'error', 0)
+      call add(msgs, 'E' . info['error'])
+    endif
+    if get(info, 'warning', 0)
+      call add(msgs, 'W' . info['warning'])
+    endif
+    return join(msgs, ' '). ' ' . get(g:, 'coc_status', '')
+  endfunction
+  set statusline=\ %{strlen(&fenc)?toupper(&fenc[0]):'-'}:%{&readonly&&&modified?'%*':&modified?'**':&readonly?'%%':'--'}\ %f\ (%{&ft})%*
+  set statusline+=%=%{strlen(FugitiveHead())?'⎇\ '.FugitiveHead():''}\ %P\ (%l,%c)\ %{StatusDiagnostic()}%*
+
   let g:ycm_global_ycm_extra_conf = expand('$HOME/bin/ycm_global_extra_conf.py')
   let g:ycm_autoclose_preview_window_after_insertion = 1
   set cscopetag
