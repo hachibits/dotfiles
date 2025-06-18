@@ -1,0 +1,7 @@
+#!/bin/bash
+for file in $(compaudit); do
+  sudo chmod 755 $(readlink -f $file)
+  sudo chmod 755 $file
+  sudo chmod 755 $(dirname $file)
+  sudo chown $(whoami) $file
+done
