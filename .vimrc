@@ -393,9 +393,15 @@ function _G.gitsigns_status()
   local ft = vim.bo.filetype or ''
 
   if head ~= '' then
-    return string.format('(%s ⎇  %s %s)', ft, head, status)
-  else
+    if status ~= '' then
+      return string.format('(%s ⎇  %s %s)', ft, head, status)
+    else
+      return string.format('(%s ⎇  %s)', ft, head)
+    end
+  elseif status ~= '' then
     return string.format('(%s %s)', ft, status)
+  else
+    return string.format('(%s)', ft)
   end
 end
 
