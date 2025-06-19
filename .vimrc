@@ -387,26 +387,28 @@ end
 function _G.gitsigns_status()
   local gs = package.loaded.gitsigns
   if not gs then return '' end
+
   local status = vim.b.gitsigns_status or ''
-  local head = vim.b.gitsigns_head
-  if head and #head > 0 then
-    return '⎇  ' .. head .. ' ' .. status
+  local head = vim.b.gitsigns_head or ''
+  local ft = vim.bo.filetype or ''
+
+  if head ~= '' then
+    return string.format('(%s ⎇  %s %s)', ft, head, status)
   else
-    return status
+    return string.format('(%s %s)', ft, status)
   end
 end
 
 vim.opt.statusline = table.concat({
-  '%{v:lua.encoding_head()}',
+  ' %{v:lua.encoding_head()}',
   ':',
   '%{v:lua.file_flags()}',
   ' %f',
-  ' (%{&ft})%*',
   ' %{v:lua.gitsigns_status()}',
   '%=',
   ' %P',
   ' (%l,%c)',
-  '%{v:lua.status_diagnostic()}',
+  '%{v:lua.status_diagnostic()} ',
 }, '')
 
 require('fzf-lua').setup({'fzf-vim'})
