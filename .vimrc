@@ -391,18 +391,20 @@ function _G.gitsigns_status()
   local status = vim.b.gitsigns_status or ''
   local head = vim.b.gitsigns_head or ''
   local ft = vim.bo.filetype or ''
+  local branch_symbol = '⎇ '
+
+  local components = { ft }
 
   if head ~= '' then
-    if status ~= '' then
-      return string.format('(%s ⎇  %s %s)', ft, head, status)
-    else
-      return string.format('(%s ⎇  %s)', ft, head)
-    end
-  elseif status ~= '' then
-    return string.format('(%s %s)', ft, status)
-  else
-    return string.format('(%s)', ft)
+    table.insert(components, branch_symbol)
+    table.insert(components, head)
   end
+
+  if status ~= '' then
+    table.insert(components, status)
+  end
+
+  return '(' .. table.concat(components, ' ') .. ')'
 end
 
 vim.opt.statusline = table.concat({
