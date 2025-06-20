@@ -7,6 +7,7 @@ if !has('nvim')
   Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --go-completer' }
   Plug 'tpope/vim-fugitive'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'tpope/vim-fugitive'
 endif
 Plug 'junegunn/vim-easy-align'
 Plug 'rust-lang/rust.vim'
@@ -459,7 +460,10 @@ set timeoutlen=1000 ttimeoutlen=10
 set laststatus=2
 set wildmenu
 set ignorecase
-set signcolumn=no
+set termguicolors
+if has('nvim')
+  set signcolumn=yes:1
+end
 
 " No visual bells
 set noerrorbells
