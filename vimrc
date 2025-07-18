@@ -13,12 +13,16 @@ if s:darwin
   Plug 'junegunn/vim-xmark'
 endif
 
-Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clang-completer --go-completer' }
+function! BuildYCM(info)
+  if a:info.status == 'installed' || a:info.force
+    !./install.py --clang-completer --gocode-completer
+  endif
+endfunction
+Plug 'Valloric/YouCompleteMe', { 'for': ['c', 'cpp'], 'do': function('BuildYCM') }
 Plug 'tpope/vim-fugitive'
 if v:version >= 703
   Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 endif
-Plug 'majutsushi/tagbar'
 Plug 'rust-lang/rust.vim'
 
 call plug#end()
@@ -36,7 +40,7 @@ set hidden
 
 imap jj <Esc>
 set backspace=indent,eol,start
-set laststatus=0
+set laststatus=2
 set number
 
 set list
@@ -71,12 +75,16 @@ command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-hea
 command! -bang -nargs=* F call fzf#vim#grep(g:rg_command .shellescape(<q-args>), 1, <bang>0)
 nnoremap <silent> <Leader>f :Rg<CR>
 
-nnoremap <Leader>t :TagbarToggle<CR>
+nnoremap <Leader>T :TagbarToggle<CR>
 
 autocmd FileType python map <buffer> <leader>x :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
 autocmd FileType python imap <buffer> <leader>x <esc>:w<CR>:exec '!python3' shellescape(@%, 1)<CR>
 let g:python_recommended_style = 0
 au Filetype python setlocal ts=2 sts=0 sw=2
 
-" save with sudo using w!!
-cmap w!! w !sudo tee > /dev/null %
+let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
+let g:ycm_autoclose_preview_window_after_completion = 1
+"let g:ycm_confirm_extra_conf = 1
+
+nnoremap <leader>t :YcmCompleter GoTo<CR>
+nnoremap <leader>d :YcmCompleter GoToDefinition<CR>
