@@ -5,6 +5,12 @@ let s:darwin = has('mac')
 
 silent! if plug#begin('~/.vim/plugged')
 
+if s:darwin
+  let g:plug_url_format = 'git@github.com:%s.git'
+else
+  let $GIT_SSL_NO_VERIFY = 'true'
+endif
+
 Plug 'junegunn/seoul256.vim'
 Plug 'junegunn/gv.vim'
 Plug 'junegunn/fzf', { 'do': './install --all' }
@@ -12,6 +18,7 @@ Plug 'junegunn/fzf.vim'
 if s:darwin
   Plug 'junegunn/vim-xmark'
 endif
+unlet! g:plug_url_format
 
 function! BuildYCM(info)
   if a:info.status == 'installed' || a:info.force
@@ -19,32 +26,35 @@ function! BuildYCM(info)
   endif
 endfunction
 Plug 'Valloric/YouCompleteMe', { 'for': ['c', 'cpp'], 'do': function('BuildYCM') }
-Plug 'tpope/vim-fugitive'
+
 if v:version >= 703
   Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 endif
-Plug 'rust-lang/rust.vim'
+
+Plug 'tpope/vim-fugitive'
+if v:version >= 703
+  Plug 'mhinz/vim-signify'
+endif
 
 call plug#end()
 endif
 
 filetype plugin indent on
-syntax on
 
-set background=dark
+syntax on
 let g:seoul256_background = 233
 silent! colo seoul256
 
 autocmd FileType gitcommit set textwidth=72
 set hidden
 
-imap jj <Esc>
+imap jk <Esc>
 set backspace=indent,eol,start
-set laststatus=2
+set laststatus=2 
 set number
 
 set list
-set listchars=tab:>·,trail:·
+set listchars=tab:\|\ ,
 
 set hlsearch
 set incsearch
@@ -53,6 +63,22 @@ set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set expandtab
+
+function! s:statusline_expr()
+  let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
+  let ro  = "%{&readonly ? '[RO] ' : ''}"
+  let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
+  let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
+  let sep = ' %= '
+  let pos = ' %-12(%l : %c%V%) '
+  let pct = ' %P'
+
+  return '[%n] %F %<'.mod.ro.ft.fug.sep.pos.'%*'.pct
+endfunction
+let &statusline = s:statusline_expr()
+
+set modelines=2
+set synmaxcol=1000
 
 " ctags
 set tags=tags;/
@@ -78,9 +104,6 @@ nnoremap <silent> <Leader>f :Rg<CR>
 nnoremap <Leader>T :TagbarToggle<CR>
 
 autocmd FileType python map <buffer> <leader>x :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
-autocmd FileType python imap <buffer> <leader>x <esc>:w<CR>:exec '!python3' shellescape(@%, 1)<CR>
-let g:python_recommended_style = 0
-au Filetype python setlocal ts=2 sts=0 sw=2
 
 let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1

@@ -1,0 +1,44 @@
+#!/bin/bash
+
+cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
+
+BASE=$(pwd)
+
+for rc in *rc *profile; do
+  mkdir -pv bak
+  [ -e ~/."$rc" ] && mv -v ~/."$rc" bak/."$rc"
+  ln -sfv "$BASE/$rc" ~/."$rc"
+done
+
+# git-prompt
+if [ ! -e ~/.git-prompt.sh ]; then
+  curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
+fi
+
+# Homebrew
+[ -z "$(which brew)" ] &&
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+echo "Updating homebrew"
+for pkg in xquartz iterm2 xbar macfuse \
+  mat visualvm loop karabiner-elements \
+  rstudio r mactex; do
+  if ! brew list --cask -1 | grep -q "^${pkg}\$"; then
+    brew install --cask $pkg
+  fi
+done
+
+brew install \
+  fd ag ripgrep ant cmake coreutils cscope exiftool doxygen liboauth \
+  maven ranger tree vim wget zsh jq ruby openjdk uv python go bat \
+  fzf tmux neovim bash-completion reattach-to-user-namespace \
+  pinentry-mac git sbt gnupg
+
+brew tap universal-ctags/universal-ctags
+brew install --HEAD universal-ctags
+
+# Create
+gem install gem-ctags --user-install
+gem ctags
+
+./install-vim
