@@ -27,6 +27,9 @@ function! BuildYCM(info)
 endfunction
 Plug 'Valloric/YouCompleteMe', { 'for': ['c', 'cpp'], 'do': function('BuildYCM') }
 
+Plug 'mileszs/ack.vim', { 'on': 'Ack' }
+Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesEnable' }
+autocmd! User indentLine doautocmd indentLine Syntax
 if v:version >= 703
   Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 endif
@@ -96,10 +99,18 @@ vnoremap <space> zf
 
 vnoremap . :norm.<CR>
 
+if executable('ag')
+  let &grepprg = 'ag --nogroup --nocolor --column'
+else
+  let &grepprg = 'grep -rn $* *'
+endif
+command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
+
 " fzf
 command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
 command! -bang -nargs=* F call fzf#vim#grep(g:rg_command .shellescape(<q-args>), 1, <bang>0)
 nnoremap <silent> <Leader>f :Rg<CR>
+nnoremap <silent> <Leader>ag :Ag <C-R><C-W><CR>
 
 nnoremap <Leader>T :TagbarToggle<CR>
 
