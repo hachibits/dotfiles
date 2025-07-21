@@ -45,7 +45,7 @@ endif
 filetype plugin indent on
 
 syntax on
-let g:seoul256_background = 233
+let g:seoul256_background = 235
 silent! colo seoul256
 
 autocmd FileType gitcommit set textwidth=72
@@ -67,6 +67,13 @@ set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set expandtab
+
+if has('termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+  hi StatusLine gui=reverse
+endif
 
 function! s:statusline_expr()
   let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"

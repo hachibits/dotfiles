@@ -9,6 +9,8 @@ fi
 #  tmux attach || exec tmux new-session && exit;
 #fi
 
+BASE=$(dirname $(readlink $BASH_SOURCE))
+
 # Disable C-S and C-Q
 if [[ -t 0 && $- = *i* ]]
 then
@@ -96,3 +98,13 @@ if [ -n "$TMUX_PANE" ]; then
   }
 fi
 
+# Z integration
+source $BASE/z.sh
+unalias z 2> /dev/null
+z() {
+  if [[ -z "$*" ]]; then
+    cd "$(_z -l 2>&1 | tac | fzf | sed 's/^[0-9]* *//')"
+  else
+    _z "$@"
+  fi
+}
