@@ -55,6 +55,7 @@ imap jk <Esc>
 set backspace=indent,eol,start
 set laststatus=2 
 set number
+set notgc
 
 set list
 set listchars=tab:\|\ ,
@@ -94,6 +95,8 @@ noremap <silent><leader>; :nohlsearch<cr>
 
 map <Tab> <C-W>W:cd %:p:h<CR>:<CR>
 
+set foldmethod=indent
+set foldnestmax=2
 nnoremap <space> za
 vnoremap <space> zf
 
