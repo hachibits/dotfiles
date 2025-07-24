@@ -103,7 +103,7 @@ source $BASE/z.sh
 unalias z 2> /dev/null
 z() {
   if [[ -z "$*" ]]; then
-    cd "$(_z -l 2>&1 | tac | fzf | sed 's/^[0-9]* *//')"
+    cd "$(_z -l 2>&1 | fzf +s --tac | sed 's/^[0-9,.]* *//')"
   else
     _z "$@"
   fi
