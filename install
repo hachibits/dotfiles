@@ -31,7 +31,7 @@ if [ "$(uname -s)" = 'Darwin' ]; then
 
   brew install \
     fd ag ripgrep ant cmake coreutils cscope exiftool doxygen liboauth \
-    maven ranger tree vim wget zsh jq ruby openjdk uv python go bat \
+    maven ranger tree vim wget zsh jq gcc ruby openjdk uv python go bat \
     fzf tmux neovim bash-completion reattach-to-user-namespace \
     pinentry-mac git sbt gnupg
 

@@ -124,7 +124,12 @@ nnoremap <silent> <Leader>ag :Ag <C-R><C-W><CR>
 
 nnoremap <Leader>T :TagbarToggle<CR>
 
+autocmd filetype cpp nnoremap <leader>x :w <bar> !g++ -std=c++17 % -o %:r<CR>
+autocmd filetype cpp nnoremap <leader>r :!%:r<CR>
 autocmd FileType python map <buffer> <leader>x :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
+
+ca Hash w !cpp -dD -P -fpreprocessed \| tr -d '[:space:]' \
+ \| md5sum \| cut -c-6
 
 let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1
