@@ -69,8 +69,9 @@ alias rgrep='grep -r -n --color=auto'
 #alias tmux='export TERM=screen-256color; /usr/local/bin/tmux'
 alias tmux="tmux -2"
 alias tmuxls="ls $TMPDIR/tmux*/"
-alias c='g++ -Wall -Wconversion -Wfatal-errors -g -std=c++17 -fsanitize=undefined,address'
+alias c='g++ -Wall -Wconversion -Wfatal-errors -g -std=c++17'
 alias g++='g++-15'
+xmodmap -e 'clear lock' -e 'keycode 66=less greater' #caps = <>
 
 __git_ps1() { :;}
 if [ -e ~/.git-prompt.sh ]; then
@@ -109,7 +110,7 @@ z() {
 }
 
 co() {
-  g++ -std=c++17 -Wall -Wextra -g -Wshadow -Wformat=2 -Wfloat-equal -Wconversion -Wlogical-op -Wcast-qual -Wcast-align -D_GLIBCXX_DEBUG -D_FORTIFY_SOURCE=2 -fsanitize=address -fsanitize=undefined -DDEBUG -o $1 $1.cpp
+  g++ -std=c++17 -Wall -Wextra -g -Wshadow -Wformat=2 -Wfloat-equal -Wconversion -Wlogical-op -Wcast-qual -Wcast-align -D_GLIBCXX_DEBUG -D_FORTIFY_SOURCE=2 -DDEBUG -o $1 $1.cpp
 }
 
 run() {
