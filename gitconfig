@@ -4,3 +4,6 @@
 [user]
   email = olxu@hotmail.com
   name = Oliver Xu
+  signingkey = D7D6E9E4
+[commit]
+  gpgsign = true

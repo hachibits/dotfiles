@@ -4,3 +4,5 @@ if [ -f /etc/profile ]; then
 fi
 
 . ~/.bashrc
+
+export GPG_TTY=$(tty)

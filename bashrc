@@ -109,10 +109,10 @@ z() {
 }
 
 co() {
-  g++ -std=c++17 -Wall -Wextra -g -Wshadow -Wformat=2 -Wfloat-equal -Wconversion -Wlogical-op -Wcast-qual -Wcast-align -D_GLIBCXX_DEBUG -D_FORTIFY_SOURCE=2 -DLOCAL -o $1 $1.cpp
+  g++ -std=c++17 -Wall -Wextra -g -Wshadow -Wformat=2 -Wfloat-equal -Wconversion -Wlogical-op -Wcast-qual -Wcast-align -D_GLIBCXX_DEBUG -D_FORTIFY_SOURCE=2 -DLOCAL -o $1.o $1.cpp
 }
 
 run() {
-  co $1 && ./$1;
+  co $1 && ./$1.o;
 }
 
