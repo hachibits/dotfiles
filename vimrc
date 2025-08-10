@@ -55,6 +55,7 @@ imap jk <Esc>
 set backspace=indent,eol,start
 set laststatus=2 
 set number
+set cursorline
 set notgc
 
 set list
@@ -134,6 +135,7 @@ ca Hash w !cpp -dD -P -fpreprocessed \| tr -d '[:space:]' \
 let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1
 "let g:ycm_confirm_extra_conf = 1
+let g:ycm_global_ycm_extra_conf = '~/dotfiles/ycm_global_extra_conf.py'
 
 nnoremap <leader>t :YcmCompleter GoTo<CR>
 nnoremap <leader>d :YcmCompleter GoToDefinition<CR>
