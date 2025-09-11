@@ -55,7 +55,6 @@ imap jk <Esc>
 set backspace=indent,eol,start
 set laststatus=2 
 set number
-set cursorline
 set notgc
 
 set list
@@ -132,10 +131,17 @@ autocmd FileType python map <buffer> <leader>x :w<CR>:exec '!python3' shellescap
 ca Hash w !cpp -dD -P -fpreprocessed \| tr -d '[:space:]' \
  \| md5sum \| cut -c-6
 
-let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1
-"let g:ycm_confirm_extra_conf = 1
 let g:ycm_global_ycm_extra_conf = '~/dotfiles/ycm_global_extra_conf.py'
+"let g:ycm_confirm_extra_conf = 1
 
-nnoremap <leader>t :YcmCompleter GoTo<CR>
-nnoremap <leader>d :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>gt :YcmCompleter GoTo<CR>
+nnoremap <leader>gD :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>gd :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>fi :YcmCompleter FixIt<CR>
+nnoremap <leader>D :YcmCompleter GetType<CR>
+nnoremap <leader>gp :YcmCompleter GetParent<CR>
+nnoremap <leader>gti :YcmCompleter GoToInclude<CR>
+nnoremap <leader>gr :YcmCompleter GoToReferences<CR>
+
+autocmd BufWritePre *.h,*.hpp,*.c,*.cpp,*.hh,*cc YcmCompleter Format
