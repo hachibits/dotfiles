@@ -46,6 +46,9 @@ else
   grep -v reattach-to-user-namespace tmux.conf > ~/.tmux.conf
 fi
 
+mkdir -p ~/.local/bin
+ln -sf /opt/homebrew/bin/g++-15 ~/.local/bin/g++
+
 git config --global user.email "olxu@hotmail.com"
 git config --global user.name "Oliver Xu"
 git config --global user.signingKey D7D6E9E4 
@@ -54,3 +57,5 @@ git config --global commit.gpgsign true
 tmux source-file ~/.tmux.conf
 
 ./install-vim
+
+cd /opt/homebrew

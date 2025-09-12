@@ -140,8 +140,8 @@ endfunction
 
 autocmd! FileType GV nnoremap <buffer> <silent> + :call <sid>gv_expand()<cr>
 
+let g:ycm_clangd_binary_path = "/opt/homebrew/opt/llvm/bin/clangd"
 let g:ycm_global_ycm_extra_conf = '~/dotfiles/ycm_global_extra_conf.py'
-"let g:ycm_clangd_binary_path = "/opt/homebrew/opt/llvm/bin/clangd"
 let g:ycm_max_diagnostics_to_display = 0
 let g:ycm_autoclose_preview_window_after_completion = 1
 "let g:ycm_confirm_extra_conf = 1

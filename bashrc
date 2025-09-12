@@ -1,15 +1,14 @@
 # vim: set filetype=bash:
 #export TERM=xterm-256color
 
-if [ -f /etc/bashrc ]; then
-  source /etc/bashrc
-fi
-
-#if [ -z "$TMUX" ]; then
-#  tmux attach || exec tmux new-session && exit;
-#fi
+export PLATFORM=$(uname -s)
+[ -f /etc/bashrc ] && . /etc/bashrc
 
 BASE=$(dirname $(readlink $BASH_SOURCE))
+
+if [ -z "$TMUX" ]; then
+  tmux attach || exec tmux new-session && exit;
+fi
 
 # Disable C-S and C-Q
 if [[ -t 0 && $- = *i* ]]
@@ -17,18 +16,27 @@ then
   stty -ixoff -ixon
 fi
 
-export EDITOR=vim
-export PAGER=less
-
-export PATH=~/go/bin:$PATH
-export PATH=~/.local/bin:$PATH
-
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden 2>/dev/null'
 
 if [ -f $(brew --prefix)/etc/bash_completion ]; then
   . $(brew --prefix)/etc/bash_completion
 fi
+
+export PATH=~/go/bin:$PATH
+if [ "$PLATFORM" = 'Darwin' ]; then
+  export PATH=~/.local/bin:$PATH
+  export PATH=/opt/homebrew/opt/llvm/bin:$PATH
+  export CC=/opt/homebrew/opt/llvm/bin/clang
+  export CXX=$CC++
+  export LDFLAGS="$LDFLAGS -L/opt/homebrew/opt/llvm/lib"
+  export CPPFLAGS="$CPPFLAGS -I/opt/homebrew/opt/llvm/include"
+else
+  export PATH=~/bin
+  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.:/usr/local/lib
+fi
+export EDITOR=vim
+export PAGER=less
 
 set -o vi
 
@@ -52,7 +60,7 @@ export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 if [ -x /usr/bin/dircolors ]; then
   eval "`dircolors -b`"
   alias ls='ls --color=auto'
-elif [ $(uname -s) = Darwin ]; then
+elif [ "$PLATFORM" = Darwin ]; then
   alias ls='ls -G'
 fi
 
@@ -70,7 +78,6 @@ alias rgrep='grep -r -n --color=auto'
 alias tmux="tmux -2"
 alias tmuxls="ls $TMPDIR/tmux*/"
 alias c='g++ -Wall -Wconversion -Wfatal-errors -g -std=c++17'
-alias g++='g++-15'
 
 __git_ps1() { :;}
 if [ -e ~/.git-prompt.sh ]; then

@@ -6,3 +6,4 @@ fi
 . ~/.bashrc
 
 export GPG_TTY=$(tty)
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
