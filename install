@@ -33,7 +33,7 @@ if [ "$(uname -s)" = 'Darwin' ]; then
     fd ag ripgrep ant cmake coreutils cscope exiftool doxygen liboauth \
     maven ranger tree vim wget zsh jq gcc ruby openjdk uv python go bat \
     fzf tmux neovim bash-completion reattach-to-user-namespace \
-    pinentry-mac git sbt gnupg
+    pinentry-mac git sbt gnupg llvm
 
   brew tap universal-ctags/universal-ctags
   brew install --HEAD universal-ctags
