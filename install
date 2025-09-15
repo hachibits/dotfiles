@@ -4,7 +4,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
 
 BASE=$(pwd)
 
-for rc in *rc *profile tmux.conf agignore; do
+for rc in *rc *profile tmux.conf agignore emacs.d; do
   mkdir -pv bak
   [ -e ~/."$rc" ] && mv -v ~/."$rc" bak/."$rc"
   ln -sfv "$BASE/$rc" ~/."$rc"
@@ -57,5 +57,3 @@ git config --global commit.gpgsign true
 tmux source-file ~/.tmux.conf
 
 ./install-vim
-
-cd /opt/homebrew
