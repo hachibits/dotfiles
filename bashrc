@@ -54,16 +54,6 @@ export COPYFILE_DISABLE=true
 
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
-export CLICOLOR=1
-export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
-
-if [ -x /usr/bin/dircolors ]; then
-  eval "`dircolors -b`"
-  alias ls='ls --color=auto'
-elif [ "$PLATFORM" = Darwin ]; then
-  alias ls='ls -G'
-fi
-
 if command -v nvim > /dev/null 2>&1; then
   alias vi=nvim
   export EDITOR=nvim
@@ -78,13 +68,38 @@ alias rgrep='grep -r -n --color=auto'
 alias tmux="tmux -2"
 alias tmuxls="ls $TMPDIR/tmux*/"
 alias c='g++ -Wall -Wconversion -Wfatal-errors -g -std=c++17'
+alias e='emacsclient -nw -a "" -c "$@"'
 
-__git_ps1() { :;}
-if [ -e ~/.git-prompt.sh ]; then
-  source ~/.git-prompt.sh
+co() {
+  g++ -std=c++17 -Wall -Wextra -g -Wshadow -Wformat=2 -Wfloat-equal -Wconversion -Wlogical-op -Wcast-qual -Wcast-align -D_GLIBCXX_DEBUG -D_FORTIFY_SOURCE=2 -DLOCAL -o $1.o $1.cpp
+}
+
+run() {
+  co $1 && ./$1.o;
+}
+
+### Colored ls
+if [ -x /usr/bin/dircolors ]; then
+  eval "`dircolors -b`"
+  alias ls='ls --color=auto'
+elif [ "$PLATFORM" = Darwin ]; then
+  alias ls='ls -G'
 fi
-PROMPT_COMMAND='history -a; printf "\[\e[38;5;59m\]%$(($COLUMNS - 4))s\r" "$(__git_ps1)"'
-PS1='\[\e[38;5;220m\][\u@\h \w]\$\[\e[0m\] '
+export CLICOLOR=1
+export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
+
+if [ "$PLATFORM" = Linux ]; then
+  PS1="\[\e[1;38m\]\u\[\e[1;34m\]@\[\e[1;31m\]\h\[\e[1;30m\]:"
+  PS1="$PS1\[\e[0;38m\]\w\[\e[1;35m\]> \[\e[0m\]"
+else
+  ### git-prompt
+  __git_ps1() { :;}
+  if [ -e ~/.git-prompt.sh ]; then
+    source ~/.git-prompt.sh
+  fi
+  PROMPT_COMMAND='history -a; printf "\[\e[38;5;59m\]%$(($COLUMNS - 4))s\r" "$(__git_ps1)"'
+  PS1='\[\e[38;5;220m\][\u@\h \w]\$\[\e[0m\] '
+fi
 
 if [ -n "$TMUX_PANE" ]; then
   ftpane() {
@@ -114,12 +129,3 @@ z() {
   [ $# -gt 0 ] && _z "$*" && return
   cd "$(_z -l 2>&1 | fzf --height 40% --reverse --inline-info +s --tac --query "$*" | sed 's/^[0-9,.]* *//')"
 }
-
-co() {
-  g++ -std=c++17 -Wall -Wextra -g -Wshadow -Wformat=2 -Wfloat-equal -Wconversion -Wlogical-op -Wcast-qual -Wcast-align -D_GLIBCXX_DEBUG -D_FORTIFY_SOURCE=2 -DLOCAL -o $1.o $1.cpp
-}
-
-run() {
-  co $1 && ./$1.o;
-}
-
