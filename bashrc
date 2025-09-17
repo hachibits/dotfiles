@@ -43,7 +43,7 @@ set -o vi
 shopt -s histappend
 shopt -s checkwinsize
 
-# man bash
+### man bash
 export HISTCONTROL=ignoreboth:erasedups
 export HISTSIZE=
 export HISTFILESIZE=
@@ -55,10 +55,8 @@ export COPYFILE_DISABLE=true
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 if command -v nvim > /dev/null 2>&1; then
-  alias vi=nvim
-  export EDITOR=nvim
+  alias vi='nvim'
 fi
-
 alias l='ls -alF'
 alias ll='ls -l'
 alias screen='screen -e\`n -s /bin/bash'
