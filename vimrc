@@ -122,6 +122,13 @@ command! -bang -nargs=* F call fzf#vim#grep(g:rg_command .shellescape(<q-args>),
 nnoremap <silent> <Leader>f :Rg<CR>
 nnoremap <silent> <Leader>ag :Ag <C-R><C-W><CR>
 
+inoremap <expr> <c-x><c-t> fzf#complete('tmuxwords.rb --all-but-current --scroll 500 --min 5')
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+inoremap <expr> <c-x><c-d> fzf#vim#complete#path('blsd')
+imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+
 nnoremap <Leader>T :TagbarToggle<CR>
 
 autocmd filetype cpp nnoremap <leader>x :w <bar> !g++ -std=c++17 % -o %:r<CR>
@@ -130,6 +137,30 @@ autocmd FileType python map <buffer> <leader>x :w<CR>:exec '!python3' shellescap
 
 ca Hash w !cpp -dD -P -fpreprocessed \| tr -d '[:space:]' \
  \| md5sum \| cut -c-6
+
+function! s:tmux_send(content, dest) range
+  let dest = empty(a:dest) ? input('To which pane? ') : a:dest
+  let tempfile = tempname()
+  call writefile(split(a:content, "\n", 1), tempfile, 'b')
+  call system(printf('tmux load-buffer -b vim-tmux %s \; paste-buffer -d -b vim-tmux -t %s',
+        \ shellescape(tempfile), shellescape(dest)))
+  call delete(tempfile)
+endfunction
+
+function! s:tmux_map(key, dest)
+  execute printf('nnoremap <silent> %s "tyy:call <SID>tmux_send(@t, "%s")<cr>', a:key, a:dest)
+  execute printf('xnoremap <silent> %s "ty:call <SID>tmux_send(@t, "%s")<cr>gv', a:key, a:dest)
+endfunction
+
+call s:tmux_map('<leader>tt', '')
+call s:tmux_map('<leader>th', '.left')
+call s:tmux_map('<leader>tj', '.bottom')
+call s:tmux_map('<leader>tk', '.top')
+call s:tmux_map('<leader>tl', '.right')
+call s:tmux_map('<leader>ty', '.top-left')
+call s:tmux_map('<leader>to', '.top-right')
+call s:tmux_map('<leader>tn', '.bottom-left')
+call s:tmux_map('<leader>t.', '.bottom-right')
 
 function! s:gv_expand()
   let line = getline('.')
@@ -140,8 +171,8 @@ endfunction
 
 autocmd! FileType GV nnoremap <buffer> <silent> + :call <sid>gv_expand()<cr>
 
-let g:ycm_clangd_binary_path = "/opt/homebrew/opt/llvm/bin/clangd"
 let g:ycm_global_ycm_extra_conf = '~/dotfiles/ycm_global_extra_conf.py'
+"let g:ycm_clangd_binary_path = "/opt/homebrew/opt/llvm/bin/clangd"
 let g:ycm_max_diagnostics_to_display = 0
 let g:ycm_autoclose_preview_window_after_completion = 1
 "let g:ycm_confirm_extra_conf = 1
