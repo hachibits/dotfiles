@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ "$1" = "" ]; then
+  emacsclient -n -c .
+elif [ "$1" = "--" ]; then
+  emacsclient -n "${@:2}"
+else
+  emacsclient -n "${@:1}"
+fi
