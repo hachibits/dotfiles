@@ -18,4 +18,6 @@ export CXX=$CC++
 export LDFLAGS="$LDFLAGS -L/opt/homebrew/opt/llvm/lib"
 export CPPFLAGS="$CPPFLAGS -I/opt/homebrew/opt/llvm/include"
 
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
 export GPG_TTY=$(tty)
