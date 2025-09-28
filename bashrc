@@ -45,10 +45,12 @@ fi
 
 alias ls='ls -G'
 alias l='ls -alF'
-alias ll='ls -l'
 alias screen='screen -e\`n -s /bin/bash'
 alias tmux="tmux -2"
 alias tmuxls="ls $TMPDIR/tmux*/"
+alias e='emacsclient -ca ""'
+alias ecn='emacsclient -nc'
+alias et='emacsclient -t'
 
 co() {
   g++ -std=c++17 -Wall -Wextra -g -Wshadow -Wformat=2 -Wfloat-equal -Wconversion -Wlogical-op -Wcast-qual -Wcast-align -D_GLIBCXX_DEBUG -D_FORTIFY_SOURCE=2 -DLOCAL -o $1.o $1.cpp
