@@ -60,37 +60,36 @@ run() {
   co $1 && ./$1.o;
 }
 
-### git-prompt
 __git_ps1() { :;}
 if [ -e ~/.git-prompt.sh ]; then
   source ~/.git-prompt.sh
 fi
-PROMPT_COMMAND='history -a; printf "\[\e[38;5;59m\]%$(($COLUMNS - 4))s\r" "$(__git_ps1)"'
-PS1='\[\e[38;5;220m\][\u@\h \w]\$\[\e[0m\] '
+
+[ -f ~/.bash_prompt.sh ] && source ~/.bash_prompt.sh
 
 if [ -n "$TMUX_PANE" ]; then
   fzf_tmux_words() {
     tmuxwords.rb --all --scroll 500 --min 5 | fzf-down --multi | paste -sd" " -
   }
 
-  ftpane() {
-    local panes current_window current_pane target target_window target_pane
-    panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
-    current_pane=$(tmux display-message -p '#I:#P')
-    current_window=$(tmux display-message -p '#I')
+ftpane() {
+  local panes current_window current_pane target target_window target_pane
+  panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
+  current_pane=$(tmux display-message -p '#I:#P')
+  current_window=$(tmux display-message -p '#I')
 
-    target=$(echo "$panes" | grep -v "$current_pane" | fzf +m --reverse) || return
+  target=$(echo "$panes" | grep -v "$current_pane" | fzf +m --reverse) || return
 
-    target_window=$(echo $target | awk 'BEGIN{FS=":|-"} {print$1}')
-    target_pane=$(echo $target | awk 'BEGIN{FS=":|-"} {print$2}' | cut -c 1)
+  target_window=$(echo $target | awk 'BEGIN{FS=":|-"} {print$1}')
+  target_pane=$(echo $target | awk 'BEGIN{FS=":|-"} {print$2}' | cut -c 1)
 
-    if [[ $current_window -eq $target_window ]]; then
-      tmux select-pane -t ${target_window}.${target_pane}
-    else
-      tmux select-pane -t ${target_window}.${target_pane} &&
+  if [[ $current_window -eq $target_window ]]; then
+    tmux select-pane -t ${target_window}.${target_pane}
+  else
+    tmux select-pane -t ${target_window}.${target_pane} &&
       tmux select-window -t $target_window
-    fi
-  }
+  fi
+}
 
   # Bind CTRL-X-CTRL-T to tmuxwords.rb
   bind '"\C-x\C-t": "$(fzf_tmux_words)\e\C-e\er"'
@@ -100,7 +99,7 @@ elif [ -d ~/iTerm2-Color-Schemes/ ]; then
     base=~/iTerm2-Color-Schemes
     $base/tools/preview.rb "$(
       ls {$base/schemes,~/.vim/plugged/seoul256.vim/iterm2}/*.itermcolors | fzf)"
-  }
+    }
 fi
 
 # Z integration

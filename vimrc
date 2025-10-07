@@ -28,13 +28,16 @@ endfunction
 Plug 'Valloric/YouCompleteMe', { 'for': ['c', 'cpp'], 'do': function('BuildYCM') }
 
 Plug 'mileszs/ack.vim', { 'on': 'Ack' }
+
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesEnable' }
 autocmd! User indentLine doautocmd indentLine Syntax
+
 if v:version >= 703
   Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 endif
 
 Plug 'tpope/vim-fugitive'
+
 if v:version >= 703
   Plug 'mhinz/vim-signify'
 endif
@@ -44,9 +47,31 @@ endif
 
 filetype plugin indent on
 
+if has('termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
+
+function! s:statusline_expr()
+  let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
+  let ro  = "%{&readonly ? '[RO] ' : ''}"
+  let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
+  let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
+  let sep = ' %= '
+  let pos = ' %-12(%l : %c%V%) '
+  let pct = ' %P'
+
+  return '[%n] %F %<'.mod.ro.ft.fug.sep.pos.'%*'.pct
+endfunction
+let &statusline = s:statusline_expr()
+
 syntax on
-let g:seoul256_background = 235
+let g:seoul256_background=233
 silent! colo seoul256
+
+let &t_ut=
+hi Normal ctermbg=NONE guibg=NONE
 
 autocmd FileType gitcommit set textwidth=72
 set hidden
@@ -67,26 +92,6 @@ set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set expandtab
-
-if has('termguicolors')
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-  hi StatusLine gui=reverse
-endif
-
-function! s:statusline_expr()
-  let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
-  let ro  = "%{&readonly ? '[RO] ' : ''}"
-  let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
-  let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
-  let sep = ' %= '
-  let pos = ' %-12(%l : %c%V%) '
-  let pct = ' %P'
-
-  return '[%n] %F %<'.mod.ro.ft.fug.sep.pos.'%*'.pct
-endfunction
-let &statusline = s:statusline_expr()
 
 set modelines=2
 set synmaxcol=1000

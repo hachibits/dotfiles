@@ -27,19 +27,12 @@ if [ "$(uname -s)" = 'Darwin' ]; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
   echo "Updating homebrew"
-  for pkg in xquartz iterm2 xbar macfuse \
-    mat visualvm loop karabiner-elements \
-    rstudio r mactex; do
-    if ! brew list --cask -1 | grep -q "^${pkg}\$"; then
-      brew install --cask $pkg
-    fi
-  done
 
   brew install \
     fd ag ripgrep ant cmake coreutils cscope exiftool doxygen liboauth \
-    maven ranger tree vim wget zsh jq gcc ruby openjdk uv python go bat \
-    fzf tmux neovim bash-completion reattach-to-user-namespace \
-    pinentry-mac git sbt gnupg llvm
+    maven wget zsh jq gcc llvm ruby openjdk go bat \
+    fzf tmux ranger tree vim neovim bash-completion git sbt gnupg \
+    reattach-to-user-namespace pinentry-mac 
 
   brew tap universal-ctags/universal-ctags
   brew install --HEAD universal-ctags
