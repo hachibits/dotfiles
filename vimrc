@@ -70,7 +70,7 @@ syntax on
 let g:seoul256_background=233
 silent! colo seoul256
 
-let &t_ut=
+let &t_ut=''
 hi Normal ctermbg=NONE guibg=NONE
 
 autocmd FileType gitcommit set textwidth=72

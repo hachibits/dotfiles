@@ -53,6 +53,7 @@ git config --global user.name "Oliver Xu"
 git config --global user.signingKey D7D6E9E4 
 git config --global commit.gpgsign true
 
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 tmux source-file ~/.tmux.conf
 
 ./install-vim
