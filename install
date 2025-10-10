@@ -21,6 +21,10 @@ for bin in $BASE/bin/*; do
   ln -svf "$bin" ~/bin
 done
 
+if [ ! -e ~/.spacemacs.d ]; then
+  ln -sfv $BASE/.spacemacs.d ~/.spacemacs.d
+fi
+
 if [ "$(uname -s)" = 'Darwin' ]; then
   # Homebrew
   [ -z "$(which brew)" ] &&
@@ -37,6 +41,9 @@ if [ "$(uname -s)" = 'Darwin' ]; then
   brew tap universal-ctags/universal-ctags
   brew install --HEAD universal-ctags
 
+  mkdir -p ~/.local/bin
+  ln -sf /opt/homebrew/bin/g++-15 ~/.local/bin/g++
+
   # Create
   gem install gem-ctags --user-install
   gem ctags
@@ -44,9 +51,6 @@ else
   rm -f ~/.tmux.conf
   grep -v reattach-to-user-namespace tmux.conf > ~/.tmux.conf
 fi
-
-mkdir -p ~/.local/bin
-ln -sf /opt/homebrew/bin/g++-15 ~/.local/bin/g++
 
 git config --global user.email "olxu@hotmail.com"
 git config --global user.name "Oliver Xu"
