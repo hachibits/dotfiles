@@ -37,3 +37,4 @@ z() {
 
 set -o vi
 
+source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"

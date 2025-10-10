@@ -25,6 +25,10 @@ if [ ! -e ~/.spacemacs.d ]; then
   ln -sfv $BASE/.spacemacs.d ~/.spacemacs.d
 fi
 
+if [ ! -d ~/.zprezto ]; then
+  git clone --recursive https://github.com/hachibits/prezto.git ~/.zprezto
+fi
+
 if [ "$(uname -s)" = 'Darwin' ]; then
   # Homebrew
   [ -z "$(which brew)" ] &&
