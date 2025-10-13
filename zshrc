@@ -1,7 +1,5 @@
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-BASE=$(dirname $(readlink $BASH_SOURCE))
-
 if [ -z "$TMUX" ]; then
   tmux attach || exec tmux new-session && exit;
 fi
@@ -28,7 +26,7 @@ alias e='emacsclient -ca ""'
 alias ecn='emacsclient -nc'
 alias et='emacsclient -t'
 
-source $BASE/z.sh
+source ~/.z.sh
 unalias z 2> /dev/null
 z() {
   [ $# -gt 0 ] && _z "$*" && return
