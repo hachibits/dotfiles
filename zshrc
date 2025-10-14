@@ -4,6 +4,8 @@ if [ -z "$TMUX" ]; then
   tmux attach || exec tmux new-session && exit;
 fi
 
+[ -z "$TMPDIR" ] && TMPDIR=/tmp
+
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden 2>/dev/null'
 [ -n "$NVIM_LISTEN_ADDRESS" ] && export FZF_DEFAULT_OPTS='--no-height'
 
@@ -16,6 +18,15 @@ if [[ -t 0 && $- = *i* ]]
 then
   stty -ixoff -ixon
 fi
+
+set -o no_extended_glob
+
+export EDITOR=vim
+export PAGER=less
+
+export PATH=~/go/bin:$PATH
+export PATH=~/bin:$PATH
+export PATH=~/.local/bin:$PATH
 
 alias ls='ls -G'
 alias l='ls -alF'
@@ -32,7 +43,5 @@ z() {
   [ $# -gt 0 ] && _z "$*" && return
   cd "$(_z -l 2>&1 | fzf --height 40% --reverse --inline-info +s --tac --query "$*" | sed 's/^[0-9,.]* *//')"
 }
-
-set -o vi
 
 source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
