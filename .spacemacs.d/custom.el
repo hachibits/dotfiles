@@ -1,5 +1,5 @@
 (custom-set-variables
-  '(grep-files-aliases
+ '(grep-files-aliases
    '(("ml" . "*.ml *.mli *.mll *.mlt *.mly *.mdx") ("all" . "* .[!.]* ..?*")
      ("el" . "*.el") ("ch" . "*.[ch]") ("c" . "*.c")
      ("cc" . "*.cc *.cxx *.cpp *.C *.CC *.c++")
@@ -13,3 +13,9 @@
      "_MTN" "_darcs" "{arch}"))
  '(helm-make-nproc 0))
  
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

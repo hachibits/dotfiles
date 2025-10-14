@@ -20,27 +20,18 @@ if s:darwin
 endif
 unlet! g:plug_url_format
 
+Plug 'tpope/vim-fugitive'
+if v:version >= 703
+  Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+  Plug 'mhinz/vim-signify'
+endif
+
 function! BuildYCM(info)
   if a:info.status == 'installed' || a:info.force
     !./install.py --clang-completer --gocode-completer
   endif
 endfunction
 Plug 'Valloric/YouCompleteMe', { 'for': ['c', 'cpp'], 'do': function('BuildYCM') }
-
-Plug 'mileszs/ack.vim', { 'on': 'Ack' }
-
-Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesEnable' }
-autocmd! User indentLine doautocmd indentLine Syntax
-
-if v:version >= 703
-  Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-endif
-
-Plug 'tpope/vim-fugitive'
-
-if v:version >= 703
-  Plug 'mhinz/vim-signify'
-endif
 
 call plug#end()
 endif
@@ -99,6 +90,8 @@ set synmaxcol=1000
 " ctags
 set tags=tags;/
 
+noremap <Space> <Nop>
+let mapleader="\<Space>"
 let maplocalleader = "\\"
 
 noremap <silent><leader>; :nohlsearch<cr>
@@ -134,6 +127,7 @@ inoremap <expr> <c-x><c-d> fzf#vim#complete#path('blsd')
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
 imap <c-x><c-l> <plug>(fzf-complete-line)
 
+let g:tagbar_sort = 0
 nnoremap <Leader>T :TagbarToggle<CR>
 
 autocmd filetype cpp nnoremap <leader>x :w <bar> !g++ -std=c++17 % -o %:r<CR>
@@ -176,7 +170,8 @@ endfunction
 
 autocmd! FileType GV nnoremap <buffer> <silent> + :call <sid>gv_expand()<cr>
 
-let g:ycm_global_ycm_extra_conf = '~/dotfiles/ycm_global_extra_conf.py'
+let base = fnamemodify(resolve(expand('<sfile>:p')),':h')
+let g:ycm_global_ycm_extra_conf = base.'/ycm_global_extra_conf.py'
 "let g:ycm_clangd_binary_path = "/opt/homebrew/opt/llvm/bin/clangd"
 let g:ycm_max_diagnostics_to_display = 0
 let g:ycm_autoclose_preview_window_after_completion = 1

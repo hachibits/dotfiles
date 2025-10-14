@@ -1,7 +1,5 @@
 .DS_Store
-bak
 *~
-*.swp
 *.bkp
 prod
 *.pcap
@@ -10,3 +8,9 @@ prod
 __pycache__/
 *.py[cod]
 *$py.class
+
+*.elc
+*.swp
+.spacemacs.env
+bak
+
