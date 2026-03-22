@@ -13,6 +13,13 @@ if s:darwin
   Plug 'junegunn/vim-xmark'
 endif
 
+function! BuildYCM(info)
+  if a:info.status == 'installed' || a:info.force
+    !./install.py --clang-completer --gocode-completer
+  endif
+endfunction
+Plug 'Valloric/YouCompleteMe', { 'for': ['c', 'cpp'], 'do': function('BuildYCM') }
+
 Plug 'tpope/vim-fugitive'
 if v:version >= 703
   Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
@@ -33,7 +40,7 @@ set hidden
 
 imap jj <Esc>
 set backspace=indent,eol,start
-set laststatus=0
+set laststatus=2
 set number
 
 set list
@@ -70,10 +77,21 @@ nnoremap <silent> <Leader>f :Rg<CR>
 
 nnoremap <Leader>t :TagbarToggle<CR>
 
-autocmd FileType python map <buffer> <leader>x :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
-autocmd FileType python imap <buffer> <leader>x <esc>:w<CR>:exec '!python3' shellescape(@%, 1)<CR>
-let g:python_recommended_style = 0
-au Filetype python setlocal ts=2 sts=0 sw=2
+let base = fnamemodify(resolve(expand('<sfile>:p')),':h')
+let g:ycm_global_ycm_extra_conf = base.'/ycm_global_extra_conf.py'
+"let g:ycm_clangd_binary_path = "/opt/homebrew/opt/llvm/bin/clangd"
+let g:ycm_max_diagnostics_to_display = 0
+let g:ycm_autoclose_preview_window_after_completion = 1
+"let g:ycm_confirm_extra_conf = 1
+
+nnoremap <leader>gt :YcmCompleter GoTo<CR>
+nnoremap <leader>gD :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>gd :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>fi :YcmCompleter FixIt<CR>
+nnoremap <leader>D :YcmCompleter GetType<CR>
+nnoremap <leader>gp :YcmCompleter GetParent<CR>
+nnoremap <leader>gti :YcmCompleter GoToInclude<CR>
+nnoremap <leader>gr :YcmCompleter GoToReferences<CR>
 
 " save with sudo using w!!
 cmap w!! w !sudo tee > /dev/null %
